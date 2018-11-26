@@ -1,0 +1,11 @@
+.idea
+Thumbs.db
+/vendor
+composer.phar
+phpunit.phar
+/phpunit.xml
+tests/
+/config/db.php
+/web/assets/
+/runtime/
+/yii
