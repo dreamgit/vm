@@ -15,24 +15,18 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	<h1><?= Html::encode($this->title) ?></h1>
 	<?php Pjax::begin(); ?>
-	<?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
 	<p>
 		<?= Html::a('Create Vm Product', ['create'], ['class' => 'btn btn-success']) ?>
 	</p>
 	
 	<?= GridView::widget([
 		'dataProvider' => $dataProvider,
-		'filterModel' => $searchModel,
 		'columns' => [
-			['class' => 'yii\grid\SerialColumn'],
-			
 			'id',
 			'title',
 			'count',
 			'price',
-			
-			['class' => 'yii\grid\ActionColumn'],
+			['class' => 'yii\grid\ActionColumn', 'template' => '{update} {delete}',],
 		],
 	]); ?>
 	<?php Pjax::end(); ?>

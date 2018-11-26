@@ -23,15 +23,11 @@ $this->params['breadcrumbs'][] = $this->title;
 	
 	<?= GridView::widget([
 		'dataProvider' => $dataProvider,
-		'filterModel' => $searchModel,
 		'columns' => [
-			['class' => 'yii\grid\SerialColumn'],
-			
 			'id',
-			'coin_id',
+			'coin.title',
 			'count',
-			
-			['class' => 'yii\grid\ActionColumn'],
+			['class' => 'yii\grid\ActionColumn', 'template' => '{update} {delete}',],
 		],
 	]); ?>
 	<?php Pjax::end(); ?>

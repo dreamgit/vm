@@ -15,7 +15,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	<h1><?= Html::encode($this->title) ?></h1>
 	<?php Pjax::begin(); ?>
-	<?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
 	<p>
 		<?= Html::a('Create Coin', ['create'], ['class' => 'btn btn-success']) ?>
@@ -23,15 +22,11 @@ $this->params['breadcrumbs'][] = $this->title;
 	
 	<?= GridView::widget([
 		'dataProvider' => $dataProvider,
-		'filterModel' => $searchModel,
 		'columns' => [
-			['class' => 'yii\grid\SerialColumn'],
-			
 			'id',
 			'title',
 			'value',
-			
-			['class' => 'yii\grid\ActionColumn'],
+			['class' => 'yii\grid\ActionColumn', 'template' => '{update} {delete}',],
 		],
 	]); ?>
 	<?php Pjax::end(); ?>
