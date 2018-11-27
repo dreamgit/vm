@@ -5,7 +5,10 @@ namespace app\controllers;
 use app\components\ChangeManager;
 use app\models\Coin;
 use app\models\Credit;
+use app\models\UserCoin;
+use app\models\VmCoin;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -23,7 +26,11 @@ class IndexController extends \yii\web\Controller
 	 */
 	public function actionIndex()
 	{
-		return $this->render('index');
+		return $this->render('index', [
+			'userCoins' => new ActiveDataProvider(['query' => UserCoin::find(),]),
+			'vmCoins' => new ActiveDataProvider(['query' => VmCoin::find(),]),
+			'credit' => Credit::find()->one(),
+		]);
 	}
 	
 	/**
@@ -40,6 +47,7 @@ class IndexController extends \yii\web\Controller
 		$credit->modify($coin->value);
 		
 		$transaction->commit();
+		$this->actionIndex();
 	}
 	
 	public function actionWithdraw()
@@ -59,6 +67,7 @@ class IndexController extends \yii\web\Controller
 		}
 		
 		$transaction->commit();
+		$this->actionIndex();
 		
 	}
 	
