@@ -72,12 +72,10 @@ class VmProductController extends Controller
 		$model = new VmProduct();
 		
 		if ($model->load(Yii::$app->request->post()) && $model->save()) {
-			return $this->redirect(['view', 'id' => $model->id]);
+			return $this->redirect(['index', 'id' => $model->id]);
 		}
 		
-		return $this->render('create', [
-			'model' => $model,
-		]);
+		return $this->render('create', ['model' => $model,]);
 	}
 	
 	/**
@@ -94,7 +92,7 @@ class VmProductController extends Controller
 		$model = $this->findModel($id);
 		
 		if ($model->load(Yii::$app->request->post()) && $model->save()) {
-			return $this->redirect(['view', 'id' => $model->id]);
+			return $this->redirect(['index', 'id' => $model->id]);
 		}
 		
 		return $this->render('update', [

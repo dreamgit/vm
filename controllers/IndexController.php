@@ -7,6 +7,7 @@ use app\models\Coin;
 use app\models\Credit;
 use app\models\UserCoin;
 use app\models\VmCoin;
+use app\models\VmProduct;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
@@ -29,6 +30,7 @@ class IndexController extends \yii\web\Controller
 		return $this->render('index', [
 			'userCoins' => new ActiveDataProvider(['query' => UserCoin::find(),]),
 			'vmCoins' => new ActiveDataProvider(['query' => VmCoin::find(),]),
+			'vmProducts' => new ActiveDataProvider(['query' => VmProduct::find(),]),
 			'credit' => Credit::find()->one(),
 		]);
 	}
