@@ -52,6 +52,7 @@ class Coin extends \yii\db\ActiveRecord
 	public function getUserCoin()
 	{
 		return $this->hasOne(UserCoin::className(), ['coin_id' => 'id']);
+//		->andWhere(['>', 'count', 0])
 	}
 	
 	/**

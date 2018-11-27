@@ -53,4 +53,17 @@ class VmCoin extends \yii\db\ActiveRecord
 	{
 		return $this->hasOne(Coin::className(), ['id' => 'coin_id']);
 	}
+	
+	/**
+	 * @param $count
+	 *
+	 * @throws \yii\base\Exception
+	 */
+	public function modify($count)
+	{
+		if ($this->count + $count < 0) {
+			throw new \yii\base\Exception('111');
+		}
+		$this->updateCounters(['count' => $count]);
+	}
 }

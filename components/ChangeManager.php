@@ -44,7 +44,10 @@ class ChangeManager
 	{
 		$changerMngr = new ChangeManager($coins, $limits);
 		
-		return $changerMngr->groupBy($changerMngr->getChange($amount));
+		$change = $changerMngr->getChange($amount);
+
+//		return $change;
+		return $changerMngr->groupBy($change);
 	}
 	
 	/**
@@ -80,8 +83,8 @@ class ChangeManager
 		if (!isset($coins) || $coins < 0) {
 			return false;
 		}
-		for ($k = 0; $k < count($coins); $k++) {
-			$coin = (string)$coins[$k];
+		
+		foreach ($coins as $coin) {
 			if (!array_key_exists($coin, $groups) && !isset($groups[$coin])) {
 				$groups[$coin] = 1;
 			} else {
@@ -111,11 +114,11 @@ class ChangeManager
 			}
 			
 			if ($limited && $this->checkQuantity($maxCoin)) {
-				$this->changed[] = $maxCoin;
+				$this->changed[] = $this->getIndex($maxCoin);
 				$this->setQuantity($maxCoin, $this->popQuantity($maxCoin));
 				$sum += $maxCoin;
 			} elseif (!$limited) {
-				$this->changed[] = $maxCoin;
+				$this->changed[] = $this->getIndex($maxCoin);
 				$sum += $maxCoin;
 			}
 		}
@@ -211,10 +214,9 @@ class ChangeManager
 	private function getLocalMax($amount, $sum)
 	{
 		$max = null;
-		$coins = $this->coins;
-		for ($k = 0; $k < count($coins); $k++) {
-			if (($coins[$k] + $sum <= $amount) && (!$this->isLimited() || $this->checkQuantity($coins[$k]))) {
-				$max = $coins[$k];
+		foreach ($this->coins as $coin) {
+			if (($coin + $sum <= $amount) && (!$this->isLimited() || $this->checkQuantity($coin))) {
+				$max = $coin;
 				break;
 			}
 		}
