@@ -52,7 +52,6 @@ class Coin extends \yii\db\ActiveRecord
 	public function getUserCoin()
 	{
 		return $this->hasOne(UserCoin::className(), ['coin_id' => 'id']);
-//		->andWhere(['>', 'count', 0])
 	}
 	
 	/**
@@ -61,5 +60,32 @@ class Coin extends \yii\db\ActiveRecord
 	public function getVmCoin()
 	{
 		return $this->hasOne(VmCoin::className(), ['coin_id' => 'id']);
+	}
+	
+	/**
+	 * @param $count
+	 * @param bool $direction True: from user to vm, false: from vm to user
+	 *
+	 * @throws \yii\base\Exception
+	 */
+	public function updateCoinCounts($count, $direction): void
+	{
+		$this->userCoin->modify($direction ? -$count : $count);
+		$this->vmCoin->modify($direction ? $count : -$count);
+	}
+	
+	/**
+	 * @param bool $returnAQ
+	 *
+	 * @return \yii\db\ActiveQuery|Coin[]
+	 */
+	public static function getCoins($returnAQ = false)
+	{
+		$query = self::find()
+			->joinWith(['vmCoin', 'userCoin'])
+			->orderBy(['value' => SORT_DESC])
+			->indexBy('id');
+		
+		return $returnAQ ? $query : $query->all();
 	}
 }

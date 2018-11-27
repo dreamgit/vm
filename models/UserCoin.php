@@ -62,7 +62,7 @@ class UserCoin extends \yii\db\ActiveRecord
 	public function modify($count)
 	{
 		if ($this->count + $count < 0) {
-			throw new \yii\base\Exception('111');
+			throw new \yii\base\Exception('1111');
 		}
 		$this->updateCounters(['count' => $count]);
 	}

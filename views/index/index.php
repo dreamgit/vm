@@ -22,7 +22,7 @@ use yii\widgets\Pjax;
 	<?php Pjax::begin(['timeout' => 10000, 'enableReplaceState' => false, 'enablePushState' => false,]) ?>
 	<?= Alert::widget() ?>
 	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-		<div class="panel panel-default">
+		<div class="panel panel-info">
 			<div class="panel-heading">
 				<h3 class="panel-title">You have:</h3>
 			</div>
@@ -44,9 +44,10 @@ use yii\widgets\Pjax;
 								'class' => 'yii\grid\ActionColumn',
 								'buttons' => [
 									'update' => function ($url, UserCoin $model, $key) {
-										return Html::a('<i class="glyphicon glyphicon-download"></i> Insert coin',
-											['insert-coin', 'id' => $model->coin_id],
-											['class' => 'badge btn ' . (!$model->count ? 'disabled' : '')]);
+										return $model->count
+											? Html::a('<i class="glyphicon glyphicon-download"></i> Insert coin', ['insert-coin', 'id' => $model->coin_id],
+												['class' => 'btn btn-success badge'])
+											: '';
 									},
 								],
 								'template' => '{update}',
@@ -58,78 +59,84 @@ use yii\widgets\Pjax;
 			</div>
 		</div>
 	</div>
+
 	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h3 class="panel-title">Products</h3>
-			</div>
-			<div class="panel-body">
-				<?= GridView::widget([
-					'dataProvider' => $vmProducts,
-					'summary' => '',
-					'showHeader' => false,
-					'columns' => [
-						'title',
-						[
-							'attribute' => 'price',
-							'value' => function ($model) {
-								return $model->price . ' рублей';
-							},
-						],
-						[
-							'attribute' => 'count',
-							'value' => function ($model) {
-								return $model->count . ' штук';
-							},
-						],
-						[
-							'class' => 'yii\grid\ActionColumn',
-							'buttons' => [
-								'update' => function ($url, VmProduct $model, $key) use ($credit) {
-									return Html::a('<i class="glyphicon glyphicon-plus-sign"></i> Buy', ['buy', 'id' => $model->id],
-										['class' => 'btn btn-primary ' . ($credit->value < $model->price ? 'disabled' : '')]);
-								},
-							],
-							'template' => '{update}',
-						],
-					
-					],
-				]); ?>
-			</div>
-		</div>
-		<div class="panel panel-default">
+		<div class="panel panel-primary">
 			<div class="panel-heading">
 				<h3 class="panel-title">Vending Machine</h3>
 			</div>
 			<div class="panel-body">
-				<div class="user-coin-view">
-					<div class="well">
-						Your credit:
-						<span class="badge"><?= $credit->value ?> рублей</span>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Products</h3>
 					</div>
-					<?= Html::a('withdraw', ['withdraw'], ['class' => 'btn btn-primary ' . (!$credit->value ? 'disabled' : '')]); ?>
+					<div class="panel-body">
+						<?= GridView::widget([
+							'dataProvider' => $vmProducts,
+							'summary' => '',
+							'showHeader' => false,
+							'columns' => [
+								'title',
+								[
+									'attribute' => 'price',
+									'value' => function ($model) {
+										return $model->price . ' рублей';
+									},
+								],
+								[
+									'attribute' => 'count',
+									'value' => function ($model) {
+										return $model->count . ' штук';
+									},
+								],
+								[
+									'class' => 'yii\grid\ActionColumn',
+									'buttons' => [
+										'update' => function ($url, VmProduct $model, $key) use ($credit) {
+											return $credit->value >= $model->price
+												? Html::a('<i class="glyphicon glyphicon-plus-sign"></i> Buy', ['buy', 'id' => $model->id],
+													['class' => 'btn btn-success btn-sm'])
+												: '';
+										},
+									],
+									'template' => '{update}',
+								],
+							
+							],
+						]); ?>
+					</div>
 				</div>
-			</div>
-		</div>
-		<div class="panel panel-success">
-			<div class="panel-heading">
-				<h3 class="panel-title">Vending Coins</h3>
-			</div>
-			<div class="panel-body">
-				<?= GridView::widget([
-					'dataProvider' => $vmCoins,
-					'summary' => '',
-					'showHeader' => false,
-					'columns' => [
-						'coin.title',
-						[
-							'attribute' => 'count',
-							'value' => function ($model) {
-								return $model->count . ' штук';
-							},
-						],
-					],
-				]); ?>
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div class="user-coin-view">
+							<div class="well">
+								<h3>Your credit:
+									<span class="label label-default"><?= $credit->value ?> p.</span>
+								</h3>
+							</div>
+							<?= Html::a('<i class="glyphicon glyphicon-share-alt"></i> Withdraw', ['withdraw'],
+								['class' => 'btn btn-danger ' . (!$credit->value ? 'disabled' : '')]); ?>
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-success">
+					<div class="panel-body">
+						<?= GridView::widget([
+							'dataProvider' => $vmCoins,
+							'summary' => '',
+							'showHeader' => false,
+							'columns' => [
+								'coin.title',
+								[
+									'attribute' => 'count',
+									'value' => function ($model) {
+										return $model->count . ' штук';
+									},
+								],
+							],
+						]); ?>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

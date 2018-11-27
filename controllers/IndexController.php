@@ -11,7 +11,7 @@ use app\models\VmProduct;
 use Yii;
 use yii\base\Exception;
 use yii\data\ActiveDataProvider;
-use yii\helpers\ArrayHelper;
+use yii\helpers\ArrayHelper as AH;
 
 /**
  * Class IndexController
@@ -32,7 +32,7 @@ class IndexController extends \yii\web\Controller
 			'userCoins' => new ActiveDataProvider(['query' => UserCoin::find(),]),
 			'vmCoins' => new ActiveDataProvider(['query' => VmCoin::find(),]),
 			'vmProducts' => new ActiveDataProvider(['query' => VmProduct::find(),]),
-			'credit' => Credit::find()->one(),
+			'credit' => Credit::getCredit(),
 		]);
 	}
 	
@@ -46,16 +46,13 @@ class IndexController extends \yii\web\Controller
 		$transaction = Yii::$app->db->beginTransaction();
 		try {
 			$coin = Coin::findOne($id);
-			$credit = Credit::find()->one();
-			$coin->userCoin->modify(-1);
-			$coin->vmCoin->modify(1);
-			$credit->modify($coin->value);
+			$coin->updateCoinCounts(1, true);
+			Credit::getCredit()->modify($coin->value);
 			
 			$transaction->commit();
-			
 		} catch (Exception $e) {
 			$transaction->rollBack();
-			Yii::$app->session->setFlash('error', 'Erorr![1]');
+			Yii::$app->session->setFlash('error', 'Erorr![0]');
 		}
 		
 		return $this->actionIndex();
@@ -67,22 +64,20 @@ class IndexController extends \yii\web\Controller
 	 */
 	public function actionWithdraw()
 	{
-		$coins = Coin::find()->joinWith('vmCoin')->orderBy(['value' => SORT_DESC])->indexBy('id')->all();
-		$credit = Credit::find()->one();
-		
-		$change = ChangeManager::change($credit->value, ArrayHelper::getColumn($coins, 'value'), ArrayHelper::getColumn($coins, 'vmCoin.count'));
-		
 		$transaction = Yii::$app->db->beginTransaction();
 		try {
-			foreach ($change as $id => $count) {
+			
+			$coins = Coin::getCoins();
+			$withdrawCoins = ChangeManager::change(Credit::getCredit()->value, AH::getColumn($coins, 'value'), AH::getColumn($coins, 'vmCoin.count'));
+			$sum = 0;
+			foreach ($withdrawCoins as $id => $count) {
 				$coin = $coins[$id];
-				$coin->userCoin->modify($count);
-				$coin->vmCoin->modify(-$count);
-				$credit->modify(-$coin->value * $count);
+				$coin->updateCoinCounts($count, false);
+				$sum += $coin->value * $count;
 			}
+			Credit::getCredit()->modify(-$sum);
 			
 			$transaction->commit();
-			
 		} catch (Exception $e) {
 			$transaction->rollBack();
 			Yii::$app->session->setFlash('error', 'Erorr![1]');
@@ -103,20 +98,17 @@ class IndexController extends \yii\web\Controller
 		try {
 			
 			$vmProduct = vmProduct::findOne($id);
-			$credit = Credit::find()->one();
-			$credit->modify(-$vmProduct->price);
 			$vmProduct->modify(-1);
+			Credit::getCredit()->modify(-$vmProduct->price);
 			
 			$transaction->commit();
-			
 			Yii::$app->session->setFlash('success', 'Thankyou! You just got one ' . $vmProduct->title);
 			
 		} catch (Exception $e) {
 			$transaction->rollBack();
-			Yii::$app->session->setFlash('error', 'Erorr![1]');
+			Yii::$app->session->setFlash('error', 'Erorr![2]');
 		}
 		
 		return $this->actionIndex();
 	}
-	
 }

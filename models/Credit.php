@@ -46,8 +46,22 @@ class Credit extends \yii\db\ActiveRecord
 	public function modify($count)
 	{
 		if ($this->value + $count < 0) {
-			throw new \yii\base\Exception('111');
+			throw new \yii\base\Exception('1113');
 		}
 		$this->updateCounters(['value' => $count]);
+	}
+	
+	/**
+	 * @return Credit
+	 * @throws \yii\base\Exception
+	 */
+	public static function getCredit()
+	{
+		$model = self::find()->one();
+		if (!$model) {
+			throw new \yii\base\Exception('1114');
+		}
+		
+		return $model;
 	}
 }
