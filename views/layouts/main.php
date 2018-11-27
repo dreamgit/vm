@@ -28,42 +28,29 @@ AppAsset::register($this);
 <?php $this->beginBody() ?>
 
 <div class="wrap">
-	<?php
-	NavBar::begin([
+	<?php NavBar::begin([
 		'brandLabel' => Yii::$app->name,
 		'brandUrl' => Yii::$app->homeUrl,
 		'options' => [
 			'class' => 'navbar-inverse navbar-fixed-top',
 		],
-	]);
-	echo Nav::widget([
+	]); ?>
+	
+	<?= Nav::widget([
 		'options' => ['class' => 'navbar-nav navbar-right'],
 		'items' => [
-			['label' => 'Home', 'url' => ['/site/index']],
-			['label' => 'About', 'url' => ['/site/about']],
-			['label' => 'Contact', 'url' => ['/site/contact']],
-			Yii::$app->user->isGuest
-				? (
-			['label' => 'Login', 'url' => ['/site/login']]
-			)
-				: (
-				'<li>'
-				. Html::beginForm(['/site/logout'], 'post')
-				. Html::submitButton(
-					'Logout (' . Yii::$app->user->identity->username . ')',
-					['class' => 'btn btn-link logout']
-				)
-				. Html::endForm()
-				. '</li>'
-			),
+			['label' => 'Coins', 'url' => ['/coin']],
+			['label' => 'User Coin', 'url' => ['/user-coin']],
+			['label' => 'Vm Coin', 'url' => ['/vm-coin']],
+			['label' => 'Vm Product', 'url' => ['/vm-product']],
 		],
-	]);
-	NavBar::end();
-	?>
+	]); ?>
+	
+	<?php NavBar::end(); ?>
 
 	<div class="container">
 		<?= Breadcrumbs::widget([
-			'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+			'links' => $this->params['breadcrumbs'] ?? [],
 		]) ?>
 		<?= Alert::widget() ?>
 		<?= $content ?>
