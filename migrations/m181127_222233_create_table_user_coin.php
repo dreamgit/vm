@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m181126_223307_create_table_user_coin extends Migration
+class m181127_222233_create_table_user_coin extends Migration
 {
 	
 	public function up()

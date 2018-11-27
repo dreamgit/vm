@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m181126_223307_create_table_vm_coin extends Migration
+class m181127_222233_create_table_vm_product extends Migration
 {
 	
 	public function up()
@@ -12,18 +12,17 @@ class m181126_223307_create_table_vm_coin extends Migration
 			$tableOptions = 'CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE=InnoDB';
 		}
 		
-		$this->createTable('{{%vm_coin}}', [
+		$this->createTable('{{%vm_product}}', [
 			'id' => $this->primaryKey(),
-			'coin_id' => $this->integer(),
+			'title' => $this->string()->notNull(),
 			'count' => $this->integer()->notNull()->defaultValue('0'),
+			'price' => $this->integer()->notNull()->defaultValue('0'),
 		], $tableOptions);
 		
-		$this->createIndex('vm_coin_coin_id_uindex', '{{%vm_coin}}', 'coin_id', true);
-		$this->addForeignKey('vm_coin_coin_id_fk', '{{%vm_coin}}', 'coin_id', '{{%coin}}', 'id', 'SET NULL', 'CASCADE');
 	}
 	
 	public function down()
 	{
-		$this->dropTable('{{%vm_coin}}');
+		$this->dropTable('{{%vm_product}}');
 	}
 }
