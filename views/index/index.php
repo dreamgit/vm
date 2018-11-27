@@ -11,6 +11,7 @@ use app\models\Credit;
 use app\models\UserCoin;
 use app\models\VmCoin;
 use app\models\VmProduct;
+use app\widgets\Alert;
 use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\Pjax;
@@ -19,6 +20,7 @@ use yii\widgets\Pjax;
 
 <div class="row">
 	<?php Pjax::begin(['timeout' => 10000, 'enableReplaceState' => false, 'enablePushState' => false,]) ?>
+	<?= Alert::widget() ?>
 	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 		<div class="panel panel-default">
 			<div class="panel-heading">
@@ -29,15 +31,22 @@ use yii\widgets\Pjax;
 					<?= GridView::widget([
 						'dataProvider' => $userCoins,
 						'summary' => '',
+						'showHeader' => false,
 						'columns' => [
 							'coin.title',
-							'count',
+							[
+								'attribute' => 'count',
+								'value' => function ($model) {
+									return $model->count . ' штук';
+								},
+							],
 							[
 								'class' => 'yii\grid\ActionColumn',
 								'buttons' => [
 									'update' => function ($url, UserCoin $model, $key) {
 										return Html::a('<i class="glyphicon glyphicon-download"></i> Insert coin',
-											['insert-coin', 'id' => $model->coin_id], ['class' => 'badge btn']);
+											['insert-coin', 'id' => $model->coin_id],
+											['class' => 'badge btn ' . (!$model->count ? 'disabled' : '')]);
 									},
 								],
 								'template' => '{update}',
@@ -61,13 +70,23 @@ use yii\widgets\Pjax;
 					'showHeader' => false,
 					'columns' => [
 						'title',
-						'price',
-						'count',
+						[
+							'attribute' => 'price',
+							'value' => function ($model) {
+								return $model->price . ' рублей';
+							},
+						],
+						[
+							'attribute' => 'count',
+							'value' => function ($model) {
+								return $model->count . ' штук';
+							},
+						],
 						[
 							'class' => 'yii\grid\ActionColumn',
 							'buttons' => [
 								'update' => function ($url, VmProduct $model, $key) use ($credit) {
-									return Html::a('<i class="glyphicon glyphicon-plus-sign"></i> Buy', ['insert-coin', 'id' => $model->id],
+									return Html::a('<i class="glyphicon glyphicon-plus-sign"></i> Buy', ['buy', 'id' => $model->id],
 										['class' => 'btn btn-primary ' . ($credit->value < $model->price ? 'disabled' : '')]);
 								},
 							],
@@ -88,7 +107,7 @@ use yii\widgets\Pjax;
 						Your credit:
 						<span class="badge"><?= $credit->value ?> рублей</span>
 					</div>
-					<?= Html::a('withdraw', ['withdraw'], ['class' => 'btn btn-primary']); ?>
+					<?= Html::a('withdraw', ['withdraw'], ['class' => 'btn btn-primary ' . (!$credit->value ? 'disabled' : '')]); ?>
 				</div>
 			</div>
 		</div>
@@ -100,9 +119,15 @@ use yii\widgets\Pjax;
 				<?= GridView::widget([
 					'dataProvider' => $vmCoins,
 					'summary' => '',
+					'showHeader' => false,
 					'columns' => [
 						'coin.title',
-						'count',
+						[
+							'attribute' => 'count',
+							'value' => function ($model) {
+								return $model->count . ' штук';
+							},
+						],
 					],
 				]); ?>
 			</div>

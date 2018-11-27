@@ -45,4 +45,18 @@ class VmProduct extends \yii\db\ActiveRecord
 			'price' => 'Price',
 		];
 	}
+	
+	/**
+	 * @param $count
+	 *
+	 * @throws \yii\base\Exception
+	 */
+	public function modify($count)
+	{
+		if ($this->count - $count < 0) {
+			throw new \yii\base\Exception('111');
+		}
+		$this->updateCounters(['count' => $count]);
+	}
+	
 }
