@@ -1,0 +1,38 @@
+CREATE TABLE coin
+(
+	id INT AUTO_INCREMENT
+		PRIMARY KEY,
+	title VARCHAR(64) NOT NULL,
+	value INT NOT NULL
+);
+
+CREATE TABLE credit
+(
+	value INT DEFAULT '0' NOT NULL
+		PRIMARY KEY
+);
+
+CREATE TABLE product
+(
+	id INT AUTO_INCREMENT
+		PRIMARY KEY,
+	title VARCHAR(64) NOT NULL,
+	count INT DEFAULT '0' NOT NULL,
+	price INT DEFAULT '0' NOT NULL
+);
+
+CREATE TABLE wallet
+(
+	id INT AUTO_INCREMENT
+		PRIMARY KEY,
+	coin_id INT NULL,
+	count INT DEFAULT '0' NOT NULL,
+	type ENUM ('user', 'vm') DEFAULT 'user' NOT NULL,
+	CONSTRAINT wallet_coin_id_type_uindex
+	UNIQUE (coin_id, type),
+	CONSTRAINT wallet_coin_id_fk
+	FOREIGN KEY (coin_id) REFERENCES coin (id)
+		ON UPDATE CASCADE
+		ON DELETE SET NULL
+);
+
