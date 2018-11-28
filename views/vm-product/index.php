@@ -5,7 +5,7 @@ use yii\helpers\Html;
 use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\search\VmProductSearch */
+/* @var $searchModel app\models\search\ProductSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Vm Products';

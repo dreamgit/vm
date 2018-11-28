@@ -1,16 +1,15 @@
 <?php
 
 /** @var $this \yii\web\View */
-/** @var $userCoins UserCoin[] */
-/** @var $vmCoins VmCoin[] */
-/** @var $vmProducts VmProduct[] */
+/** @var $userWallets Wallet[] */
+/** @var $Wallets Wallet[] */
+/** @var $vmProducts Product[] */
 
 /** @var $credit Credit */
 
 use app\models\Credit;
-use app\models\UserCoin;
-use app\models\VmCoin;
-use app\models\VmProduct;
+use app\models\Product;
+use app\models\Wallet;
 use app\widgets\Alert;
 use yii\grid\GridView;
 use yii\helpers\Html;
@@ -29,7 +28,7 @@ use yii\widgets\Pjax;
 			<div class="panel-body">
 				<div class="user-coin-view">
 					<?= GridView::widget([
-						'dataProvider' => $userCoins,
+						'dataProvider' => $userWallets,
 						'summary' => '',
 						'showHeader' => false,
 						'columns' => [
@@ -43,7 +42,7 @@ use yii\widgets\Pjax;
 							[
 								'class' => 'yii\grid\ActionColumn',
 								'buttons' => [
-									'update' => function ($url, UserCoin $model, $key) {
+									'update' => function ($url, Wallet $model, $key) {
 										return $model->count
 											? Html::a('<i class="glyphicon glyphicon-download"></i> Insert coin', ['insert-coin', 'id' => $model->coin_id],
 												['class' => 'btn btn-success badge'])
@@ -92,7 +91,7 @@ use yii\widgets\Pjax;
 								[
 									'class' => 'yii\grid\ActionColumn',
 									'buttons' => [
-										'update' => function ($url, VmProduct $model, $key) use ($credit) {
+										'update' => function ($url, Product $model, $key) use ($credit) {
 											return $credit->value >= $model->price
 												? Html::a('<i class="glyphicon glyphicon-plus-sign"></i> Buy', ['buy', 'id' => $model->id],
 													['class' => 'btn btn-success btn-sm'])
@@ -122,7 +121,7 @@ use yii\widgets\Pjax;
 				<div class="panel panel-success">
 					<div class="panel-body">
 						<?= GridView::widget([
-							'dataProvider' => $vmCoins,
+							'dataProvider' => $Wallets,
 							'summary' => '',
 							'showHeader' => false,
 							'columns' => [

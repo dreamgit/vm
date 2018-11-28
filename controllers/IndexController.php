@@ -5,9 +5,8 @@ namespace app\controllers;
 use app\components\ChangeManager;
 use app\models\Coin;
 use app\models\Credit;
-use app\models\UserCoin;
-use app\models\VmCoin;
-use app\models\VmProduct;
+use app\models\Product;
+use app\models\Wallet;
 use Yii;
 use yii\base\Exception;
 use yii\data\ActiveDataProvider;
@@ -17,6 +16,7 @@ use yii\helpers\ArrayHelper as AH;
  * Class IndexController
  *
  * @package app\controllers
+ * @property null|\app\models\Credit $credit
  */
 class IndexController extends \yii\web\Controller
 {
@@ -29,10 +29,10 @@ class IndexController extends \yii\web\Controller
 	public function actionIndex()
 	{
 		return $this->render('index', [
-			'userCoins' => new ActiveDataProvider(['query' => UserCoin::find(),]),
-			'vmCoins' => new ActiveDataProvider(['query' => VmCoin::find(),]),
-			'vmProducts' => new ActiveDataProvider(['query' => VmProduct::find(),]),
-			'credit' => Credit::getCredit(),
+			'userWallets' => new ActiveDataProvider(['query' => Wallet::find()->where(['type' => 'user']),]),
+			'Wallets' => new ActiveDataProvider(['query' => Wallet::find()->where(['type' => 'vm']),]),
+			'vmProducts' => new ActiveDataProvider(['query' => Product::find(),]),
+			'credit' => $this->credit,
 		]);
 	}
 	
@@ -45,14 +45,15 @@ class IndexController extends \yii\web\Controller
 	{
 		$transaction = Yii::$app->db->beginTransaction();
 		try {
+			
 			$coin = Coin::findOne($id);
 			$coin->updateCoinCounts(1, true);
-			Credit::getCredit()->modify($coin->value);
+			$this->credit->modify($coin->value);
 			
 			$transaction->commit();
 		} catch (Exception $e) {
 			$transaction->rollBack();
-			Yii::$app->session->setFlash('error', 'Erorr![0]');
+			Yii::$app->session->setFlash('error', 'Erorr!: ' . $e->getMessage());
 		}
 		
 		return $this->actionIndex();
@@ -67,20 +68,21 @@ class IndexController extends \yii\web\Controller
 		$transaction = Yii::$app->db->beginTransaction();
 		try {
 			
-			$coins = Coin::getCoins();
-			$withdrawCoins = ChangeManager::change(Credit::getCredit()->value, AH::getColumn($coins, 'value'), AH::getColumn($coins, 'vmCoin.count'));
+			$coins = Coin::getCoins('vmWallet');
+			$withdrawCoins = ChangeManager::change($this->credit->value, AH::getColumn($coins, 'value'), AH::getColumn($coins, 'vmWallet.count'));
 			$sum = 0;
 			foreach ($withdrawCoins as $id => $count) {
 				$coin = $coins[$id];
 				$coin->updateCoinCounts($count, false);
 				$sum += $coin->value * $count;
 			}
-			Credit::getCredit()->modify(-$sum);
+			$this->credit->modify(-$sum);
 			
 			$transaction->commit();
+			Yii::$app->session->setFlash('success', 'Withdraw done. You got ' . $sum . ' p.');
 		} catch (Exception $e) {
 			$transaction->rollBack();
-			Yii::$app->session->setFlash('error', 'Erorr![1]');
+			Yii::$app->session->setFlash('error', 'Erorr!: ' . $e->getMessage());
 		}
 		
 		return $this->actionIndex();
@@ -97,18 +99,33 @@ class IndexController extends \yii\web\Controller
 		$transaction = Yii::$app->db->beginTransaction();
 		try {
 			
-			$vmProduct = vmProduct::findOne($id);
-			$vmProduct->modify(-1);
-			Credit::getCredit()->modify(-$vmProduct->price);
+			$product = Product::findOne($id);
+			$product->modify(-1);
+			$this->credit->modify(-$product->price);
 			
 			$transaction->commit();
-			Yii::$app->session->setFlash('success', 'Thankyou! You just got one ' . $vmProduct->title);
+			Yii::$app->session->setFlash('success', 'Thankyou! You just got one ' . $product->title);
 			
 		} catch (Exception $e) {
 			$transaction->rollBack();
-			Yii::$app->session->setFlash('error', 'Erorr![2]');
+			Yii::$app->session->setFlash('error', 'Erorr!: ' . $e->getMessage());
 		}
 		
 		return $this->actionIndex();
 	}
+	
+	/**
+	 * @return Credit|null
+	 * @throws Exception
+	 */
+	public function getCredit()
+	{
+		$model = Credit::find()->one();
+		if (!$model) {
+			throw new Exception('No credit table');
+		}
+		
+		return $model;
+	}
+	
 }

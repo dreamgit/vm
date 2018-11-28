@@ -2,14 +2,14 @@
 
 namespace app\models\search;
 
-use app\models\VmCoin;
+use app\models\Wallet;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
 /**
- * VmCoinSearch represents the model behind the search form of `app\models\VmCoin`.
+ * WalletSearch represents the model behind the search form of `app\models\Wallet`.
  */
-class VmCoinSearch extends VmCoin
+class WalletSearch extends Wallet
 {
 	
 	/**
@@ -40,7 +40,7 @@ class VmCoinSearch extends VmCoin
 	 */
 	public function search($params)
 	{
-		$query = VmCoin::find();
+		$query = Wallet::find();
 		
 		// add conditions that should always apply here
 		

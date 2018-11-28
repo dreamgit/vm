@@ -5,7 +5,7 @@ use yii\helpers\Html;
 use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\search\VmCoinSearch */
+/* @var $searchModel app\models\search\WalletSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Vm Coins';

@@ -3,14 +3,15 @@
 namespace app\models;
 
 /**
- * This is the model class for table "vm_coin".
+ * This is the model class for table "wallet".
  *
  * @property int $id
  * @property int $coin_id
  * @property int $count
+ * @property string $type
  * @property Coin $coin
  */
-class VmCoin extends \yii\db\ActiveRecord
+class Wallet extends \yii\db\ActiveRecord
 {
 	
 	/**
@@ -18,7 +19,7 @@ class VmCoin extends \yii\db\ActiveRecord
 	 */
 	public static function tableName()
 	{
-		return 'vm_coin';
+		return 'wallet';
 	}
 	
 	/**
@@ -27,9 +28,10 @@ class VmCoin extends \yii\db\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['coin_id'], 'required'],
 			[['coin_id', 'count'], 'integer'],
-			[['coin_id'], 'unique'],
+			[['type'], 'required'],
+			[['type'], 'string'],
+			[['coin_id', 'type'], 'unique', 'targetAttribute' => ['coin_id', 'type']],
 			[['coin_id'], 'exist', 'skipOnError' => true, 'targetClass' => Coin::className(), 'targetAttribute' => ['coin_id' => 'id']],
 		];
 	}
@@ -43,6 +45,7 @@ class VmCoin extends \yii\db\ActiveRecord
 			'id' => 'ID',
 			'coin_id' => 'Coin ID',
 			'count' => 'Count',
+			'type' => 'Type',
 		];
 	}
 	
@@ -62,7 +65,7 @@ class VmCoin extends \yii\db\ActiveRecord
 	public function modify($count)
 	{
 		if ($this->count + $count < 0) {
-			throw new \yii\base\Exception('111');
+			throw new \yii\base\Exception('No more coins');
 		}
 		$this->updateCounters(['count' => $count]);
 	}

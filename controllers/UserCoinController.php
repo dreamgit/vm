@@ -2,17 +2,17 @@
 
 namespace app\controllers;
 
-use app\models\search\UserCoinSearch;
-use app\models\UserCoin;
+use app\models\search\WalletSearch;
+use app\models\Wallet;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 /**
- * UserCoinController implements the CRUD actions for UserCoin model.
+ * UserWalletController implements the CRUD actions for Wallet model.
  */
-class UserCoinController extends Controller
+class UserWalletController extends Controller
 {
 	
 	/**
@@ -31,13 +31,13 @@ class UserCoinController extends Controller
 	}
 	
 	/**
-	 * Lists all UserCoin models.
+	 * Lists all Wallet models.
 	 *
 	 * @return mixed
 	 */
 	public function actionIndex()
 	{
-		$searchModel = new UserCoinSearch();
+		$searchModel = new WalletSearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 		
 		return $this->render('index', [
@@ -47,7 +47,7 @@ class UserCoinController extends Controller
 	}
 	
 	/**
-	 * Displays a single UserCoin model.
+	 * Displays a single Wallet model.
 	 *
 	 * @param integer $id
 	 *
@@ -62,14 +62,14 @@ class UserCoinController extends Controller
 	}
 	
 	/**
-	 * Creates a new UserCoin model.
+	 * Creates a new Wallet model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 *
 	 * @return mixed
 	 */
 	public function actionCreate()
 	{
-		$model = new UserCoin();
+		$model = new Wallet();
 		
 		if ($model->load(Yii::$app->request->post()) && $model->save()) {
 			return $this->redirect(['index', 'id' => $model->id]);
@@ -81,7 +81,7 @@ class UserCoinController extends Controller
 	}
 	
 	/**
-	 * Updates an existing UserCoin model.
+	 * Updates an existing Wallet model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 *
 	 * @param integer $id
@@ -103,7 +103,7 @@ class UserCoinController extends Controller
 	}
 	
 	/**
-	 * Deletes an existing UserCoin model.
+	 * Deletes an existing Wallet model.
 	 * If deletion is successful, the browser will be redirected to the 'index' page.
 	 *
 	 * @param integer $id
@@ -119,17 +119,17 @@ class UserCoinController extends Controller
 	}
 	
 	/**
-	 * Finds the UserCoin model based on its primary key value.
+	 * Finds the Wallet model based on its primary key value.
 	 * If the model is not found, a 404 HTTP exception will be thrown.
 	 *
 	 * @param integer $id
 	 *
-	 * @return UserCoin the loaded model
+	 * @return Wallet the loaded model
 	 * @throws NotFoundHttpException if the model cannot be found
 	 */
 	protected function findModel($id)
 	{
-		if (($model = UserCoin::findOne($id)) !== null) {
+		if (($model = Wallet::findOne($id)) !== null) {
 			return $model;
 		}
 		

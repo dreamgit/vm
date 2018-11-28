@@ -2,14 +2,14 @@
 
 namespace app\models\search;
 
-use app\models\UserCoin;
+use app\models\Product;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
 /**
- * UserCoinSearch represents the model behind the search form of `app\models\UserCoin`.
+ * ProductSearch represents the model behind the search form of `app\models\Product`.
  */
-class UserCoinSearch extends UserCoin
+class ProductSearch extends Product
 {
 	
 	/**
@@ -18,7 +18,8 @@ class UserCoinSearch extends UserCoin
 	public function rules()
 	{
 		return [
-			[['id', 'coin_id', 'count'], 'integer'],
+			[['id', 'count', 'price'], 'integer'],
+			[['title'], 'safe'],
 		];
 	}
 	
@@ -40,7 +41,7 @@ class UserCoinSearch extends UserCoin
 	 */
 	public function search($params)
 	{
-		$query = UserCoin::find();
+		$query = Product::find();
 		
 		// add conditions that should always apply here
 		
@@ -59,9 +60,11 @@ class UserCoinSearch extends UserCoin
 		// grid filtering conditions
 		$query->andFilterWhere([
 			'id' => $this->id,
-			'coin_id' => $this->coin_id,
 			'count' => $this->count,
+			'price' => $this->price,
 		]);
+		
+		$query->andFilterWhere(['like', 'title', $this->title]);
 		
 		return $dataProvider;
 	}

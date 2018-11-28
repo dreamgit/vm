@@ -2,17 +2,17 @@
 
 namespace app\controllers;
 
-use app\models\search\VmCoinSearch;
-use app\models\VmCoin;
+use app\models\search\WalletSearch;
+use app\models\Wallet;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 /**
- * VmCoinController implements the CRUD actions for VmCoin model.
+ * WalletController implements the CRUD actions for Wallet model.
  */
-class VmCoinController extends Controller
+class WalletController extends Controller
 {
 	
 	/**
@@ -31,13 +31,13 @@ class VmCoinController extends Controller
 	}
 	
 	/**
-	 * Lists all VmCoin models.
+	 * Lists all Wallet models.
 	 *
 	 * @return mixed
 	 */
 	public function actionIndex()
 	{
-		$searchModel = new VmCoinSearch();
+		$searchModel = new WalletSearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 		
 		return $this->render('index', [
@@ -47,7 +47,7 @@ class VmCoinController extends Controller
 	}
 	
 	/**
-	 * Displays a single VmCoin model.
+	 * Displays a single Wallet model.
 	 *
 	 * @param integer $id
 	 *
@@ -62,14 +62,14 @@ class VmCoinController extends Controller
 	}
 	
 	/**
-	 * Creates a new VmCoin model.
+	 * Creates a new Wallet model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 *
 	 * @return mixed
 	 */
 	public function actionCreate()
 	{
-		$model = new VmCoin();
+		$model = new Wallet();
 		
 		if ($model->load(Yii::$app->request->post()) && $model->save()) {
 			return $this->redirect(['index', 'id' => $model->id]);
@@ -81,7 +81,7 @@ class VmCoinController extends Controller
 	}
 	
 	/**
-	 * Updates an existing VmCoin model.
+	 * Updates an existing Wallet model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 *
 	 * @param integer $id
@@ -103,7 +103,7 @@ class VmCoinController extends Controller
 	}
 	
 	/**
-	 * Deletes an existing VmCoin model.
+	 * Deletes an existing Wallet model.
 	 * If deletion is successful, the browser will be redirected to the 'index' page.
 	 *
 	 * @param integer $id
@@ -119,17 +119,17 @@ class VmCoinController extends Controller
 	}
 	
 	/**
-	 * Finds the VmCoin model based on its primary key value.
+	 * Finds the Wallet model based on its primary key value.
 	 * If the model is not found, a 404 HTTP exception will be thrown.
 	 *
 	 * @param integer $id
 	 *
-	 * @return VmCoin the loaded model
+	 * @return Wallet the loaded model
 	 * @throws NotFoundHttpException if the model cannot be found
 	 */
 	protected function findModel($id)
 	{
-		if (($model = VmCoin::findOne($id)) !== null) {
+		if (($model = Wallet::findOne($id)) !== null) {
 			return $model;
 		}
 		

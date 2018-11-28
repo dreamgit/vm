@@ -39,15 +39,16 @@ class ChangeManager
 	 * @param null $limits
 	 *
 	 * @return array|bool
+	 * @throws \yii\base\Exception
 	 */
 	public static function change($amount, $coins, $limits = null)
 	{
-		$changerMngr = new ChangeManager($coins, $limits);
+		$result = self::groupBy((new ChangeManager($coins, $limits))->getChange($amount));
+		if (!$result) {
+			throw new \yii\base\Exception('No coins for change');
+		}
 		
-		$change = $changerMngr->getChange($amount);
-
-//		return $change;
-		return $changerMngr->groupBy($change);
+		return $result;
 	}
 	
 	/**
@@ -55,7 +56,7 @@ class ChangeManager
 	 *
 	 * @return bool|int
 	 */
-	public function getChange($amount)
+	public function getChange($amount = 0)
 	{
 		$this->changed = [];
 		
@@ -63,9 +64,6 @@ class ChangeManager
 			return false;
 		}
 		
-		if (!isset($amount)) {
-			$this->amount = 0;
-		}
 		$this->amount = $amount;
 		$this->changed = $this->makeChange($this->amount);
 		
@@ -77,7 +75,7 @@ class ChangeManager
 	 *
 	 * @return array|bool
 	 */
-	public function groupBy($coins)
+	public static function groupBy($coins)
 	{
 		$groups = [];
 		if (!isset($coins) || $coins < 0) {

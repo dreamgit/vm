@@ -2,14 +2,14 @@
 
 namespace app\models\search;
 
-use app\models\VmProduct;
+use app\models\Wallet;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
 /**
- * VmProductSearch represents the model behind the search form of `app\models\VmProduct`.
+ * WalletSearch represents the model behind the search form of `app\models\Wallet`.
  */
-class VmProductSearch extends VmProduct
+class WalletSearch extends Wallet
 {
 	
 	/**
@@ -18,8 +18,7 @@ class VmProductSearch extends VmProduct
 	public function rules()
 	{
 		return [
-			[['id', 'count', 'price'], 'integer'],
-			[['title'], 'safe'],
+			[['id', 'coin_id', 'count'], 'integer'],
 		];
 	}
 	
@@ -41,7 +40,7 @@ class VmProductSearch extends VmProduct
 	 */
 	public function search($params)
 	{
-		$query = VmProduct::find();
+		$query = Wallet::find();
 		
 		// add conditions that should always apply here
 		
@@ -60,11 +59,9 @@ class VmProductSearch extends VmProduct
 		// grid filtering conditions
 		$query->andFilterWhere([
 			'id' => $this->id,
+			'coin_id' => $this->coin_id,
 			'count' => $this->count,
-			'price' => $this->price,
 		]);
-		
-		$query->andFilterWhere(['like', 'title', $this->title]);
 		
 		return $dataProvider;
 	}

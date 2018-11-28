@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model app\models\UserCoin */
+/* @var $model app\models\Wallet */
 
 $this->title = 'Create User Coin';
 $this->params['breadcrumbs'][] = ['label' => 'User Coins', 'url' => ['index']];

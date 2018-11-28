@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\search\VmCoinSearch */
+/* @var $model app\models\search\WalletSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 

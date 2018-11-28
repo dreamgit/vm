@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model app\models\VmProduct */
+/* @var $model app\models\Product */
 
 $this->title = 'Create Vm Product';
 $this->params['breadcrumbs'][] = ['label' => 'Vm Products', 'url' => ['index']];

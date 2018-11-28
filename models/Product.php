@@ -10,7 +10,7 @@ namespace app\models;
  * @property int $count
  * @property int $price
  */
-class VmProduct extends \yii\db\ActiveRecord
+class Product extends \yii\db\ActiveRecord
 {
 	
 	/**
@@ -18,7 +18,7 @@ class VmProduct extends \yii\db\ActiveRecord
 	 */
 	public static function tableName()
 	{
-		return 'vm_product';
+		return 'product';
 	}
 	
 	/**
@@ -54,7 +54,7 @@ class VmProduct extends \yii\db\ActiveRecord
 	public function modify($count)
 	{
 		if ($this->count - $count < 0) {
-			throw new \yii\base\Exception('1112');
+			throw new \yii\base\Exception('No more products');
 		}
 		$this->updateCounters(['count' => $count]);
 	}

@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\VmCoin */
+/* @var $model app\models\Wallet */
 
 $this->title = 'Update Vm Coin: ' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Vm Coins', 'url' => ['index']];

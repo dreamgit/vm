@@ -8,8 +8,9 @@ namespace app\models;
  * @property int $id
  * @property string $title
  * @property int $value
- * @property UserCoin $userCoin
- * @property VmCoin $vmCoin
+ * @property \yii\db\ActiveQuery|Wallet $vmWallet
+ * @property \yii\db\ActiveQuery $wallet
+ * @property \yii\db\ActiveQuery|Wallet $userWallet
  */
 class Coin extends \yii\db\ActiveRecord
 {
@@ -49,17 +50,25 @@ class Coin extends \yii\db\ActiveRecord
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getUserCoin()
+	public function getUserWallet()
 	{
-		return $this->hasOne(UserCoin::className(), ['coin_id' => 'id']);
+		return $this->hasOne(Wallet::className(), ['coin_id' => 'id'])->andWhere(['type' => 'user']);
 	}
 	
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getVmCoin()
+	public function getVmWallet()
 	{
-		return $this->hasOne(VmCoin::className(), ['coin_id' => 'id']);
+		return $this->hasOne(Wallet::className(), ['coin_id' => 'id'])->andWhere(['type' => 'vm']);
+	}
+	
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getWallet()
+	{
+		return $this->hasOne(Wallet::className(), ['coin_id' => 'id']);
 	}
 	
 	/**
@@ -70,22 +79,20 @@ class Coin extends \yii\db\ActiveRecord
 	 */
 	public function updateCoinCounts($count, $direction): void
 	{
-		$this->userCoin->modify($direction ? -$count : $count);
-		$this->vmCoin->modify($direction ? $count : -$count);
+		$this->userWallet->modify($direction ? -$count : $count);
+		$this->vmWallet->modify($direction ? $count : -$count);
 	}
 	
 	/**
-	 * @param bool $returnAQ
+	 * @param null $type
 	 *
 	 * @return \yii\db\ActiveQuery|Coin[]
 	 */
-	public static function getCoins($returnAQ = false)
+	public static function getCoins($type = null)
 	{
-		$query = self::find()
-			->joinWith(['vmCoin', 'userCoin'])
+		return self::find()
+			->joinWith($type)
 			->orderBy(['value' => SORT_DESC])
-			->indexBy('id');
-		
-		return $returnAQ ? $query : $query->all();
+			->indexBy('id')->all();
 	}
 }
