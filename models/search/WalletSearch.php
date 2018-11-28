@@ -19,6 +19,7 @@ class WalletSearch extends Wallet
 	{
 		return [
 			[['id', 'coin_id', 'count'], 'integer'],
+			[['type'], 'string'],
 		];
 	}
 	
@@ -42,8 +43,6 @@ class WalletSearch extends Wallet
 	{
 		$query = Wallet::find();
 		
-		// add conditions that should always apply here
-		
 		$dataProvider = new ActiveDataProvider([
 			'query' => $query,
 		]);
@@ -51,8 +50,6 @@ class WalletSearch extends Wallet
 		$this->load($params);
 		
 		if (!$this->validate()) {
-			// uncomment the following line if you do not want to return any records when validation fails
-			// $query->where('0=1');
 			return $dataProvider;
 		}
 		
@@ -61,6 +58,7 @@ class WalletSearch extends Wallet
 			'id' => $this->id,
 			'coin_id' => $this->coin_id,
 			'count' => $this->count,
+			'type' => $this->type,
 		]);
 		
 		return $dataProvider;

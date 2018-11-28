@@ -39,9 +39,9 @@ AppAsset::register($this);
 		'options' => ['class' => 'navbar-nav navbar-right'],
 		'items' => [
 			['label' => 'Coins', 'url' => ['/coin']],
-			['label' => 'User Coin', 'url' => ['/user-coin']],
-			['label' => 'Vm Coin', 'url' => ['/vm-coin']],
-			['label' => 'Vm Product', 'url' => ['/vm-product']],
+			['label' => 'User Wallet', 'url' => ['/wallet', 'WalletSearch[type]' => 'user',]],
+			['label' => 'Vm Wallet', 'url' => ['/wallet', 'WalletSearch[type]' => 'vm',]],
+			['label' => 'Product', 'url' => ['/product']],
 		],
 	]); ?>
 	

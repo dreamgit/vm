@@ -17,6 +17,9 @@ use yii\widgets\ActiveForm;
 	<?= $form->field($model, 'coin_id')->dropDownList(ArrayHelper::map(Coin::find()->all(), 'id', 'title')) ?>
 	
 	<?= $form->field($model, 'count')->textInput() ?>
+	
+	<?= $form->field($model, 'type')->dropDownList(['user' => 'user', 'vm' => 'vm']) ?>
+
 
 	<div class="form-group">
 		<?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

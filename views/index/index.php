@@ -18,8 +18,8 @@ use yii\widgets\Pjax;
 ?>
 
 <div class="row">
-	<?php Pjax::begin(['timeout' => 10000, 'enableReplaceState' => false, 'enablePushState' => false,]) ?>
-	<?= Alert::widget() ?>
+	<?php Pjax::begin(['timeout' => 10000, 'enableReplaceState' => false, 'enablePushState' => false]) ?>
+	<?= Alert::widget(['autoClose' => 3000]) ?>
 	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 		<div class="panel panel-info">
 			<div class="panel-heading">

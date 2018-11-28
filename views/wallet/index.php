@@ -8,7 +8,7 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\models\search\WalletSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'User Coins';
+$this->title = 'User Wallet';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-coin-index">
@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php Pjax::begin(); ?>
 
 	<p>
-		<?= Html::a('Create User Coin', ['create'], ['class' => 'btn btn-success']) ?>
+		<?= Html::a('Create User Wallet', ['create'], ['class' => 'btn btn-success']) ?>
 	</p>
 	
 	<?= GridView::widget([

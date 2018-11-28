@@ -67,19 +67,23 @@ class IndexController extends \yii\web\Controller
 	{
 		$transaction = Yii::$app->db->beginTransaction();
 		try {
-			
 			$coins = Coin::getCoins('vmWallet');
-			$withdrawCoins = ChangeManager::change($this->credit->value, AH::getColumn($coins, 'value'), AH::getColumn($coins, 'vmWallet.count'));
-			$sum = 0;
-			foreach ($withdrawCoins as $id => $count) {
+			$withdrawCoinIds = ChangeManager::change($this->credit->value, AH::getColumn($coins, 'value'), AH::getColumn($coins, 'vmWallet.count'));
+			$stack = [];
+			$total = 0;
+			foreach ($withdrawCoinIds as $id => $count) {
 				$coin = $coins[$id];
 				$coin->updateCoinCounts($count, false);
-				$sum += $coin->value * $count;
+				$total += $coin->value * $count;
+				// for controll & debug change return
+				$stack[] = ['title' => $coin->title, 'value' => $coin->value, 'count' => $count, 'sum' => $coin->value * $count];
 			}
-			$this->credit->modify(-$sum);
+			$this->credit->modify(-$total);
 			
 			$transaction->commit();
-			Yii::$app->session->setFlash('success', 'Withdraw done. You got ' . $sum . ' p.');
+			Yii::$app->session->setFlash('success', 'Withdraw done. You got ' . implode(', ', array_map(function ($value) {
+					return $value['title'] . ' - ' . $value['count'] . 'шт.';
+				}, $stack)) . '');
 		} catch (Exception $e) {
 			$transaction->rollBack();
 			Yii::$app->session->setFlash('error', 'Erorr!: ' . $e->getMessage());

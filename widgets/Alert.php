@@ -42,6 +42,9 @@ class Alert extends \yii\bootstrap\Widget
 	 */
 	public $closeButton = [];
 	
+	/** @var bool|int timout to autoclose. false to not */
+	public $autoClose = false;
+	
 	/**
 	 * {@inheritdoc}
 	 */
@@ -65,7 +68,18 @@ class Alert extends \yii\bootstrap\Widget
 						'class' => $this->alertTypes[$type] . $appendClass,
 					]),
 				]);
+				if ($this->autoClose) {
+					echo "
+						<script>
+							setTimeout(function(){
+								$('#" . ($this->getId() . '-' . $type . '-' . $i) . "').alert('close');
+							}, " . $this->autoClose . ")
+						</script>
+					";
+				}
+				
 			}
+			
 			
 			$session->removeFlash($type);
 		}
