@@ -1,11 +1,29 @@
-.idea
-Thumbs.db
+# folders and files
 /vendor
+/bin
+/runtime
+/luya
 composer.phar
-phpunit.phar
-/phpunit.xml
-tests/
-/config/db.php
-/web/assets/
-/runtime/
-/yii
+.DS_Store
+.env
+/docker/.env
+/.env
+
+# project config
+/configs/env-local-db.php
+/configs/env.php
+
+# SASS & GULP
+/resources/.sass-cache
+/resources/local/
+
+#IDE: netbeans
+/nbproject
+
+#IDE: PHPStorm
+.idea/
+
+#IDE: eclipse
+.buildpath
+.project
+.settings
